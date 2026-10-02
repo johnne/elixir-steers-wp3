@@ -1,0 +1,331 @@
+[
+  {
+    "objectID": "slides.html",
+    "href": "slides.html",
+    "title": "",
+    "section": "",
+    "text": "Title\ndate\n\n\n\n\nImproving the carbon footprint of a computational workflow\nFri 2 Oct 2026",
+    "crumbs": [
+      "Slides"
+    ]
+  },
+  {
+    "objectID": "slides.html#slides",
+    "href": "slides.html#slides",
+    "title": "",
+    "section": "",
+    "text": "Title\ndate\n\n\n\n\nImproving the carbon footprint of a computational workflow\nFri 2 Oct 2026",
+    "crumbs": [
+      "Slides"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Introduction",
+    "section": "",
+    "text": "Introduction\nNotes, slides and thoughts on ELIXIR-STEERS WP3",
+    "crumbs": [
+      "Intro"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html",
+    "href": "pages/presentations/2026-10-01.html",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "",
+    "text": "NBIS Bioinformatics support project\nAim: Investigate and characterize host-microbiome niches in mouse and human gut\nSupport needed\n\nDevelop robust and scalable analysis pipeline(s) for host and microbial data\nEnsure reproducibility, computational efficiency and broad usability\n\nConcerns\n\nRuntime for 1 sample between 2-11 days.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#overview",
+    "href": "pages/presentations/2026-10-01.html#overview",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "",
+    "text": "NBIS Bioinformatics support project\nAim: Investigate and characterize host-microbiome niches in mouse and human gut\nSupport needed\n\nDevelop robust and scalable analysis pipeline(s) for host and microbial data\nEnsure reproducibility, computational efficiency and broad usability\n\nConcerns\n\nRuntime for 1 sample between 2-11 days.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#pipeline-overview",
+    "href": "pages/presentations/2026-10-01.html#pipeline-overview",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Pipeline overview",
+    "text": "Pipeline overview\n\nWorkflow manager: Snakemake\nSoftware management: pixi/apptainer\nInstallation: pixi shell",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#pipeline-overview-1",
+    "href": "pages/presentations/2026-10-01.html#pipeline-overview-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Pipeline overview",
+    "text": "Pipeline overview",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#optimizations",
+    "href": "pages/presentations/2026-10-01.html#optimizations",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Optimizations",
+    "text": "Optimizations\n\n\nIncorporate bash scripts into Snakemake\nRemove redundant resource-intensive steps (e.g. multiple mapping against host genome)\nSplit input to parallelize taxonomic assignment\nOptimized python packages (e.g. polars) instead of custom perl scripts.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#benchmarking",
+    "href": "pages/presentations/2026-10-01.html#benchmarking",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Benchmarking",
+    "text": "Benchmarking\nTest data\n\n\n\nsample\ntotal seqs\n\n\n\n\n1.0.1\n5.5 M\n\n\n1.0.2\n11 M\n\n\n1.0.3\n16.5 M\n\n\n\nPipeline versions\n\nlegacy: original pipeline at start of project\nupdated: pipeline with optimizations and improvements at end of project\n\nCompute system\n\nDardel HPC system with SLURM workload manager",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#benchmarking-1",
+    "href": "pages/presentations/2026-10-01.html#benchmarking-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Benchmarking",
+    "text": "Benchmarking\n\nSnakemake benchmark files for all rules to get runtime, memory usage and CPU efficiency\n\nrule trim_R2:\n    benchmark: \"results/{sample}/trim_R2.benchmark.txt\"\n\nEnergy use estimated with:\n\n\\[\nE_{CPU} = runtime * CPUs * W_{CPU} * PUE\n\\]\n\\[\nE_{MEM} = runtime * RAM_{peak} * W_{MEM} * PUE\n\\]\n\\[\nE_{TOTAL} = E_{CPU} + E_{MEM}\n\\]\n\nPUE: Power usage effectiveness. Data center energy overhead (cooling etc.)\nWCPU: Watts per CPU.\nWMEM: Watts per GB RAM.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#assumptions",
+    "href": "pages/presentations/2026-10-01.html#assumptions",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nAllocations on Dardel: Peak RAM also allocates CPUs so a job running 1 CPU at high RAM reserves more CPUs.\nPower usage effectiveness: 1.15\nWatts per CPU: 3.5\nWatts per GB RAM: 0.3725",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#results",
+    "href": "pages/presentations/2026-10-01.html#results",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Results",
+    "text": "Results",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#preprocessing",
+    "href": "pages/presentations/2026-10-01.html#preprocessing",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Preprocessing",
+    "text": "Preprocessing\n\n\n\n\n\n\n\n\n\n\nFigure 1: Runtime, memory and energy usage for read trimming and filtering.\n\n\n\n\nTake-home:\n\nRuntime and energy usage decreased by ~90% and ~75%, respectively.\nMemory consumption in updated flat with increasing sample size.\nSavings grow with sample size.\nPrimary optimizations: Removal of extra filtering step.\nFurther optimizations: Reduce allocated threads.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#alignment-and-annotation",
+    "href": "pages/presentations/2026-10-01.html#alignment-and-annotation",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Alignment and annotation",
+    "text": "Alignment and annotation\n\n\n\n\n\n\n\n\n\n\nFigure 2: Metrics for alignment + annotation (host) and demultiplexing\n\n\n\n\nTake-home:\n\nSpeed gain moderate (-11% runtime) but energy reduction is large (-84%).\nPrimary optimizations:\n\n1 single alignment instead of 2\nlarge jobs split into sub-parts with better resource allocation\n\nFurther optimizations: Reduce allocated threads for demultiplexing.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#umi-filtering",
+    "href": "pages/presentations/2026-10-01.html#umi-filtering",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "UMI filtering",
+    "text": "UMI filtering\n\n\n\n\n\n\n\n\n\n\nFigure 3: Metrics for UMI filtering\n\n\n\n\nTake-home:\n\nRuntime and energy usage reduced by ~70%.\nMemory footprint grows faster with sample size in legacy.\nPrimary optimizations: switching from single-threaded looping over every read (legacy) to multi-threaded operations on columns (updated).\nFurther optimizations: Reduce allocated threads.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#taxonomy",
+    "href": "pages/presentations/2026-10-01.html#taxonomy",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Taxonomy",
+    "text": "Taxonomy\n\n\n\n\n\n\n\n\n\n\nFigure 4: Taxonomic assignments\n\n\n\n\nTake-home:\n\nRuntime down 23%, energy down 49%.\nEnergy saving grows with sample size (primarily due to lower memory footprint).\nPrimary optimizations:\n\nskipping post-processing (calculating best-hit, LCA, adding taxonomy).\nincreased parallelization\n\nFurther optimizations: Increase size of splits to reduce overhead.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#summary",
+    "href": "pages/presentations/2026-10-01.html#summary",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Summary",
+    "text": "Summary\n\n\n\n\n\n\n\n\n\n\nFigure 5: Difference in energy usage (updated-legacy) per pipeline part.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#summary-1",
+    "href": "pages/presentations/2026-10-01.html#summary-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Summary",
+    "text": "Summary\n\nPercentage change (updated vs legacy)Absolute values (legacy → updated)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPart\nRuntime\nCPU time\nPeak RAM\nCPU energy\nMemory energy\nTotal energy\nDardel accounting\n\n\n\n\npreprocessing\n−90%\n−78%\n−88%\n−65%\n−98%\n−69%\n−75%\n\n\nalign-annotate\n−11%\n−71%\n−6%\n−82%\n−84%\n−82%\n−82%\n\n\numi-filter\n−69%\n−40%\n−36%\n+26%\n−80%\n−26%\n−76%\n\n\ntaxonomy\n−23%\n−1%\n−85%\n+6%\n−64%\n−13%\n−49%\n\n\nTotal\n−23%\n−4%\n−62%\n−4%\n−65%\n−19%\n−51%\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPart\nRuntime (h)\nCPU time (h)\nPeak RAM (GB)\nCPU energy (Wh)\nMemory energy (Wh)\nTotal energy (Wh)\nDardel accounting (Wh)\n\n\n\n\npreprocessing\n0.55 → 0.06\n0.60 → 0.13\n2.3 → 0.27\n2.7 → 0.93\n0.33 → 0.01\n3.0 → 0.94\n3.7 → 0.94\n\n\nalign-annotate\n5.3 → 4.7\n23.5 → 6.7\n30.2 → 28.4\n294 → 53\n34 → 5.4\n329 → 58\n329 → 58\n\n\numi-filter\n0.13 → 0.04\n0.11 → 0.06\n11.5 → 7.3\n0.52 → 0.66\n0.50 → 0.10\n1.0 → 0.76\n3.5 → 0.84\n\n\ntaxonomy\n81.9 → 63.2\n564 → 559\n75.4 → 11.2\n2,391 → 2,527\n842 → 300\n3,233 → 2,827\n5,532 → 2,827\n\n\nTotal\n87.9 → 68.1\n588 → 566\n75.4 → 28.4\n2,689 → 2,581\n877 → 305\n3,566 → 2,887\n5,868 → 2,887",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#total-walltime",
+    "href": "pages/presentations/2026-10-01.html#total-walltime",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Total walltime",
+    "text": "Total walltime\nTotal walltime for test samples per pipeline version.\n\n\n\nversion\nruntime (s)\nruntime (h:m:s)\nruntime\n\n\n\n\nlegacy\n150164\n41:42:44\n1 day, 17 h, 42 m, 44 s\n\n\nupdated\n9732\n2:42:12\n2 h, 42 m, 12 s\n\n\n\n\nThe updated pipeline had a runtime of 6% compared to the legacy version.",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/2026-10-01.html#take-home-message",
+    "href": "pages/presentations/2026-10-01.html#take-home-message",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Take-home message",
+    "text": "Take-home message\n\n\nUse a workflow manager (helps with parallelization, resource handling, re-runs etc.)\nThink carefully about workflow structure (minimize redundancies).\nWhen possible, split big jobs into smaller steps to use resources more efficiently.\nSplit input files by size to increase parallelization and make resource use predictable (but optimize split sizes).\nUse built-in post-processing for efficient software (e.g mmseqs easy-search) rather than custom-built scripts.\nAvoid for loops over large data-frames -&gt; instead use purpose-built packages (e.g. polars).",
+    "crumbs": [
+      "Slides",
+      "Improving the carbon footprint of a computational workflow"
+    ]
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#overview",
+    "href": "pages/presentations/document-revealjs.html#overview",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Overview",
+    "text": "Overview\nNBIS Bioinformatics support project\nAim: Investigate and characterize host-microbiome niches in mouse and human gut\nSupport needed\n\nDevelop robust and scalable analysis pipeline(s) for host and microbial data\nEnsure reproducibility, computational efficiency and broad usability\n\nConcerns\n\nRuntime for 1 sample between 2-11 days."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#pipeline-overview",
+    "href": "pages/presentations/document-revealjs.html#pipeline-overview",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Pipeline overview",
+    "text": "Pipeline overview\n\nWorkflow manager: Snakemake\nSoftware management: pixi/apptainer\nInstallation: pixi shell"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#pipeline-overview-1",
+    "href": "pages/presentations/document-revealjs.html#pipeline-overview-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Pipeline overview",
+    "text": "Pipeline overview"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#optimizations",
+    "href": "pages/presentations/document-revealjs.html#optimizations",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Optimizations",
+    "text": "Optimizations\n\nIncorporate bash scripts into Snakemake\nRemove redundant resource-intensive steps (e.g. multiple mapping against host genome)\nSplit input to parallelize taxonomic assignment\nOptimized python packages (e.g. polars) instead of custom perl scripts."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#benchmarking",
+    "href": "pages/presentations/document-revealjs.html#benchmarking",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Benchmarking",
+    "text": "Benchmarking\nTest data\n\n\n\nsample\ntotal seqs\n\n\n\n\n1.0.1\n5.5 M\n\n\n1.0.2\n11 M\n\n\n1.0.3\n16.5 M\n\n\n\nPipeline versions\n\nlegacy: original pipeline at start of project\nupdated: pipeline with optimizations and improvements at end of project\n\nCompute system\n\nDardel HPC system with SLURM workload manager"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#benchmarking-1",
+    "href": "pages/presentations/document-revealjs.html#benchmarking-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Benchmarking",
+    "text": "Benchmarking\n\nSnakemake benchmark files for all rules to get runtime, memory usage and CPU efficiency\n\nrule trim_R2:\n    benchmark: \"results/{sample}/trim_R2.benchmark.txt\"\n\nEnergy use estimated with:\n\n\\[\nE_{CPU} = runtime * CPUs * W_{CPU} * PUE\n\\]\n\\[\nE_{MEM} = runtime * RAM_{peak} * W_{MEM} * PUE\n\\]\n\\[\nE_{TOTAL} = E_{CPU} + E_{MEM}\n\\]\n\nPUE: Power usage effectiveness. Data center energy overhead (cooling etc.)\nWCPU: Watts per CPU.\nWMEM: Watts per GB RAM."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#assumptions",
+    "href": "pages/presentations/document-revealjs.html#assumptions",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Assumptions",
+    "text": "Assumptions\n\nAllocations on Dardel: Peak RAM also allocates CPUs so a job running 1 CPU at high RAM reserves more CPUs.\nPower usage effectiveness: 1.15\nWatts per CPU: 3.5\nWatts per GB RAM: 0.3725"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#results",
+    "href": "pages/presentations/document-revealjs.html#results",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Results",
+    "text": "Results"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#preprocessing",
+    "href": "pages/presentations/document-revealjs.html#preprocessing",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Preprocessing",
+    "text": "Preprocessing\n\n\n\n\n\n\n\n\n\n\nFigure 1: Runtime, memory and energy usage for read trimming and filtering.\n\n\n\n\nTake-home:\n\nRuntime and energy usage decreased by ~90% and ~75%, respectively.\nMemory consumption in updated flat with increasing sample size.\nSavings grow with sample size.\nPrimary optimizations: Removal of extra filtering step.\nFurther optimizations: Reduce allocated threads."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#alignment-and-annotation",
+    "href": "pages/presentations/document-revealjs.html#alignment-and-annotation",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Alignment and annotation",
+    "text": "Alignment and annotation\n\n\n\n\n\n\n\n\n\n\nFigure 2: Metrics for alignment + annotation (host) and demultiplexing\n\n\n\n\nTake-home:\n\nSpeed gain moderate (-11% runtime) but energy reduction is large (-84%).\nPrimary optimizations:\n\n1 single alignment instead of 2\nlarge jobs split into sub-parts with better resource allocation\n\nFurther optimizations: Reduce allocated threads for demultiplexing."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#umi-filtering",
+    "href": "pages/presentations/document-revealjs.html#umi-filtering",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "UMI filtering",
+    "text": "UMI filtering\n\n\n\n\n\n\n\n\n\n\nFigure 3: Metrics for UMI filtering\n\n\n\n\nTake-home:\n\nRuntime and energy usage reduced by ~70%.\nMemory footprint grows faster with sample size in legacy.\nPrimary optimizations: switching from single-threaded looping over every read (legacy) to multi-threaded operations on columns (updated).\nFurther optimizations: Reduce allocated threads."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#taxonomy",
+    "href": "pages/presentations/document-revealjs.html#taxonomy",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Taxonomy",
+    "text": "Taxonomy\n\n\n\n\n\n\n\n\n\n\nFigure 4: Taxonomic assignments\n\n\n\n\nTake-home:\n\nRuntime down 23%, energy down 49%.\nEnergy saving grows with sample size (primarily due to lower memory footprint).\nPrimary optimizations:\n\nskipping post-processing (calculating best-hit, LCA, adding taxonomy).\nincreased parallelization\n\nFurther optimizations: Increase size of splits to reduce overhead."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#summary",
+    "href": "pages/presentations/document-revealjs.html#summary",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Summary",
+    "text": "Summary\n\n\n\n\n\n\n\n\n\n\nFigure 5: Difference in energy usage (updated-legacy) per pipeline part."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#summary-1",
+    "href": "pages/presentations/document-revealjs.html#summary-1",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Summary",
+    "text": "Summary\n\nPercentage change (updated vs legacy)Absolute values (legacy → updated)\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPart\nRuntime\nCPU time\nPeak RAM\nCPU energy\nMemory energy\nTotal energy\nDardel accounting\n\n\n\n\npreprocessing\n−90%\n−78%\n−88%\n−65%\n−98%\n−69%\n−75%\n\n\nalign-annotate\n−11%\n−71%\n−6%\n−82%\n−84%\n−82%\n−82%\n\n\numi-filter\n−69%\n−40%\n−36%\n+26%\n−80%\n−26%\n−76%\n\n\ntaxonomy\n−23%\n−1%\n−85%\n+6%\n−64%\n−13%\n−49%\n\n\nTotal\n−23%\n−4%\n−62%\n−4%\n−65%\n−19%\n−51%\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\n\nPart\nRuntime (h)\nCPU time (h)\nPeak RAM (GB)\nCPU energy (Wh)\nMemory energy (Wh)\nTotal energy (Wh)\nDardel accounting (Wh)\n\n\n\n\npreprocessing\n0.55 → 0.06\n0.60 → 0.13\n2.3 → 0.27\n2.7 → 0.93\n0.33 → 0.01\n3.0 → 0.94\n3.7 → 0.94\n\n\nalign-annotate\n5.3 → 4.7\n23.5 → 6.7\n30.2 → 28.4\n294 → 53\n34 → 5.4\n329 → 58\n329 → 58\n\n\numi-filter\n0.13 → 0.04\n0.11 → 0.06\n11.5 → 7.3\n0.52 → 0.66\n0.50 → 0.10\n1.0 → 0.76\n3.5 → 0.84\n\n\ntaxonomy\n81.9 → 63.2\n564 → 559\n75.4 → 11.2\n2,391 → 2,527\n842 → 300\n3,233 → 2,827\n5,532 → 2,827\n\n\nTotal\n87.9 → 68.1\n588 → 566\n75.4 → 28.4\n2,689 → 2,581\n877 → 305\n3,566 → 2,887\n5,868 → 2,887"
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#total-walltime",
+    "href": "pages/presentations/document-revealjs.html#total-walltime",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Total walltime",
+    "text": "Total walltime\nTotal walltime for test samples per pipeline version.\n\n\n\nversion\nruntime (s)\nruntime (h:m:s)\nruntime\n\n\n\n\nlegacy\n150164\n41:42:44\n1 day, 17 h, 42 m, 44 s\n\n\nupdated\n9732\n2:42:12\n2 h, 42 m, 12 s\n\n\n\n\nThe updated pipeline had a runtime of 6% compared to the legacy version."
+  },
+  {
+    "objectID": "pages/presentations/document-revealjs.html#take-home-message",
+    "href": "pages/presentations/document-revealjs.html#take-home-message",
+    "title": "Improving the carbon footprint of a computational workflow",
+    "section": "Take-home message",
+    "text": "Take-home message\n\nUse a workflow manager (helps with parallelization, resource handling, re-runs etc.)\nThink carefully about workflow structure (minimize redundancies).\nWhen possible, split big jobs into smaller steps to use resources more efficiently.\nSplit input files by size to increase parallelization and make resource use predictable (but optimize split sizes).\nUse built-in post-processing for efficient software (e.g mmseqs easy-search) rather than custom-built scripts.\nAvoid for loops over large data-frames -&gt; instead use purpose-built packages (e.g. polars)."
+  }
+]
