@@ -1,0 +1,19 @@
+[workspace]
+authors = ["John Sundh <john.sundh@scilifelab.se>"]
+channels = ["conda-forge", "bioconda"]
+name = "elixir-steers-wp3"
+platforms = ["osx-arm64"]
+version = "0.1.0"
+
+[activation]
+env = { QUARTO_PYTHON = "$CONDA_PREFIX/bin/python" }
+
+[tasks]
+install_kernels = { cmd = """python -m ipykernel install --user --name=steers""" }
+render = { cmd = """quarto render doc""", depends-on = ["install_kernels"] }
+
+[dependencies]
+altair = "*"
+python = "*"
+polars = "*"
+jupyter = ">=1.1.1,<2"

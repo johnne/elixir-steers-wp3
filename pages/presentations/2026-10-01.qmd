@@ -1,0 +1,350 @@
+---
+title: Improving the carbon footprint of a computational workflow
+subtitle: ELIXIR-STEERS Carbon footprint reporting workshop
+date: 2026-10-02
+author: John Sundh
+jupyter:
+    kernelspec:
+        display_name: Python 3
+        language: python
+        name: steers
+format:
+    nbis-revealjs: 
+        code-fold: true
+        embed-resources: true
+        smaller: true
+        output-file: document-revealjs.html
+    html:
+        code-fold: true
+format-links: [nbis-revealjs]
+#bibliography: references.bib
+---
+
+```{python}
+#| label: imports
+import polars as pl
+import altair as alt
+from altair import datum
+```
+
+```{python}
+#| label: plotting-function
+
+def plot(df, part="preprocessing", shape_legend=True):
+    base = (
+        alt.Chart(df)
+        .encode(x="sample", xOffset="version", fill="version")
+        .transform_filter(datum.pipeline_part == part)
+    )
+    if not shape_legend:
+        shape = alt.Shape("rule", legend=None)
+    else:
+        shape = alt.Shape("rule")
+
+    runtime_points = base.mark_point(size=60, color="black", strokeWidth=0.5).encode(
+        y="s", shape=shape, tooltip=["rule"]
+    )
+    runtime_bars = base.mark_bar().encode(y=alt.Y("sum(s):Q", title="Runtime (s)"))
+    runtime = (runtime_bars + runtime_points).properties(title="Runtime")
+    max_rss_points = (
+        base.mark_point(size=60, color="black", strokeWidth=0.5)
+        .encode(
+            y=alt.Y("max_rss_gb", title="Peak RAM (GB)").scale(type="log"),
+            shape=shape,
+            tooltip=["rule"],
+        )
+        # .transform_calculate(max_rss="datum.max_rss / 1000")
+        .properties(title="Memory (Peak)")
+    )
+    eff_points = base.mark_point(size=60, color="black", strokeWidth=0.5).encode(
+        y="thread_eff", shape="rule", tooltip=["rule"]
+    )
+    eff_bars = base.mark_bar().encode(
+        y=alt.Y("mean(thread_eff):Q", title="Thread efficiency")
+    )
+    eff = (eff_bars + eff_points).properties(title="Thread efficiency")
+    mem_points = base.mark_point(size=60, color="black", strokeWidth=0.5).encode(
+        y="GB_hours",
+        shape=shape,
+        tooltip=["rule"],
+    )
+    mem_bars = base.mark_bar().encode(
+        y=alt.Y("sum(GB_hours):Q", title="GB-hours (Peak RAM x runtime)")
+    )
+    mem = (mem_bars + mem_points).properties(title="Memory (GB-hours)")
+    energy_points = base.mark_point(size=60, color="black", strokeWidth=0.5).encode(
+        y=alt.Y("Wh_total"), shape=shape, tooltip=["rule"]
+    )
+    energy_bars = base.mark_bar().encode(
+        y=alt.Y("sum(Wh_dardel_accounting):Q", title="Energy (Wh)")
+    )
+    energy = (energy_bars + energy_points).properties(title="Energy")
+    return (
+        alt.hconcat(runtime, eff, mem, energy)
+        .configure_axis(labelFontSize=12, titleFontSize=14)
+        .configure_legend(labelFontSize=12)
+    )
+```
+
+## Overview {.smaller}
+
+_NBIS Bioinformatics support project_
+
+**Aim**: Investigate and characterize host-microbiome niches in mouse and human gut
+
+**Support needed**
+
+
+* Develop [robust]{.green} and [scalable]{.green} analysis pipeline(s) for host and microbial data
+* Ensure [reproducibility]{.green}, [computational efficiency]{.green} and [broad usability]{.green}
+
+**Concerns**
+
+* Runtime for 1 sample between 2-11 days.
+
+## Pipeline overview {.smaller}
+
+* Workflow manager: Snakemake
+* Software management: pixi/apptainer
+* Installation: `pixi shell`
+
+## Pipeline overview {.smaller}
+
+![](../../assets/images/snakevision_dag.svg)
+
+## Optimizations {.smaller}
+
+::: {.incremental}
+
+1. Incorporate bash scripts into Snakemake
+2. Remove redundant resource-intensive steps (_e.g._ multiple mapping against host genome)
+3. Split input to parallelize taxonomic assignment
+4. Optimized python packages (_e.g._ [polars](https://pola.rs/)) instead of custom perl scripts.
+
+:::
+
+## Benchmarking {.smaller}
+
+**Test data**
+
+| sample | total seqs |
+|----------------|------------|
+| 1.0.1 | 5.5 M |
+| 1.0.2 | 11 M |
+| 1.0.3 | 16.5 M |
+
+**Pipeline versions**
+
+* `legacy`: original pipeline at start of project
+* `updated`: pipeline with optimizations and improvements at end of project
+
+**Compute system**
+
+* [Dardel HPC system](https://www.pdc.kth.se/hpc-services/computing-systems/dardel-hpc-system/) with SLURM workload manager
+
+## Benchmarking {.smaller}
+
+* Snakemake benchmark files for all rules to get runtime, memory usage and CPU efficiency
+
+```{.python}
+rule trim_R2:
+    benchmark: "results/{sample}/trim_R2.benchmark.txt"
+```
+
+* Energy use estimated with:
+
+$$
+E_{CPU} = runtime * CPUs * W_{CPU} * PUE
+$$
+
+$$
+E_{MEM} = runtime * RAM_{peak} * W_{MEM} * PUE
+$$
+
+$$
+E_{TOTAL} = E_{CPU} + E_{MEM}
+$$
+
+
+* **PUE**: Power usage effectiveness. Data center energy overhead (cooling etc.)
+* **W~CPU~**: Watts per CPU.
+* **W~MEM~**: Watts per GB RAM.
+
+
+## Assumptions
+
+* Allocations on Dardel: Peak RAM also allocates CPUs so a job running 1 CPU at high RAM reserves more CPUs.
+* Power usage effectiveness: 1.15
+* Watts per CPU: 3.5
+* Watts per GB RAM: 0.3725
+
+```{python}
+#| label: read-data
+df = pl.read_csv("../../data/energy_rows.csv")
+df = df.with_columns(GB_hours=(pl.col("s") / 3600) * (pl.col("max_rss") / 1000))
+df = df.with_columns(max_rss_gb=pl.col("max_rss") / 1000)
+df = df.with_columns(thread_eff=pl.col("busy_cores") / pl.col("threads"))
+```
+
+## Results
+
+## Preprocessing {.smaller}
+
+```{python}
+#| label: fig-preprocessing
+#| fig-cap: Runtime, memory and energy usage for read trimming and filtering.
+plot(df, part="preprocessing", shape_legend=False)
+```
+
+Take-home:
+
+* Runtime and energy usage decreased by ~90% and ~75%, respectively.
+* Memory consumption in `updated` flat with increasing sample size.
+* Savings grow with sample size.
+* **Primary optimizations**: Removal of extra filtering step.
+* **Further optimizations**: Reduce allocated threads.
+
+## Alignment and annotation {.smaller}
+
+```{python}
+#| label: fig-align-annotate
+#| fig-cap: Metrics for alignment + annotation (host) and demultiplexing
+
+plot(df, part="align-annotate", shape_legend=False)
+```
+
+Take-home:
+
+* Speed gain moderate (-11% runtime) but energy reduction is large (-84%).
+* **Primary optimizations**: 
+  * 1 single alignment instead of 2
+  * large jobs split into sub-parts with better resource allocation
+* **Further optimizations**: Reduce allocated threads for demultiplexing.
+
+## UMI filtering
+
+```{python}
+#| label: fig-umi-filter
+#| fig-cap: Metrics for UMI filtering
+
+plot(df, part="umi-filter", shape_legend=False)
+```
+
+Take-home:
+
+* Runtime and energy usage reduced by ~70%.
+* Memory footprint grows faster with sample size in `legacy`.
+* **Primary optimizations**: switching from single-threaded looping over every read (legacy) to multi-threaded operations on columns (updated). 
+* **Further optimizations**: Reduce allocated threads.
+
+## Taxonomy {.smaller}
+
+```{python}
+#| label: fig-taxonomy
+#| fig-cap: Taxonomic assignments
+plot(df, part="taxonomy", shape_legend=False)
+```
+
+Take-home:
+
+* Runtime down 23%, energy down 49%.
+* Energy saving grows with sample size (primarily due to lower memory footprint).
+* **Primary optimizations**: 
+  * skipping post-processing (calculating best-hit, LCA, adding taxonomy).
+  * increased parallelization 
+* **Further optimizations**: Increase size of splits to reduce overhead.
+
+
+## Summary {.smaller}
+
+```{python}
+#| label: fig-diff
+#| fig-cap: Difference in energy usage (updated-legacy) per pipeline part.
+
+agg = df.group_by("pipeline_part", "version", "sample").agg(
+    pl.sum("Wh_dardel_accounting"),
+    pl.sum("Wh_total"),
+)
+legacy = agg.filter(pl.col("version") == "legacy")
+update = agg.filter(pl.col("version") == "updated")
+source = (
+    update.join(legacy, on=["sample", "pipeline_part"])
+    .with_columns(
+        (pl.col("Wh_dardel_accounting") - pl.col("Wh_dardel_accounting_right")).alias(
+            "Total (Dardel accounting)"
+        ),
+        (pl.col("Wh_total") - pl.col("Wh_total_right")).alias("Total"),
+    )
+    .select("sample", "Total (Dardel accounting)", "Total", "pipeline_part")
+    .unpivot(
+        index=["sample", "pipeline_part"], variable_name="variable", value_name="W"
+    )
+)
+alt.Chart(source.filter(pl.col("pipeline_part") != "vsearch")).mark_bar().encode(
+    x="sample",
+    y="W",
+    xOffset="variable",
+    color=alt.Color("variable").scale(scheme="paired"),
+    column=alt.Column(
+        "pipeline_part",
+        sort=["preprocessing", "align-annotate", "umi-filter", "taxonomy"],
+        title="Energy difference by part",
+    ),
+    tooltip=["W", "variable"],
+).resolve_scale(y="independent").configure_axis(
+    labelFontSize=12, titleFontSize=14
+).configure_legend(labelFontSize=12).configure_header(
+    labelFontSize=12, titleFontSize=14
+)
+```
+
+## Summary {.smaller}
+
+::: {.panel-tabset}
+
+## Percentage change (updated vs legacy) {.smaller}
+
+| Part | Runtime | CPU time | Peak RAM | CPU energy | Memory energy | Total energy | Dardel accounting |
+|---|---|---|---|---|---|---|---|
+| preprocessing | −90% | −78% | −88% | −65% | −98% | −69% | −75% |
+| align-annotate | −11% | −71% | −6% | −82% | −84% | −82% | −82% |
+| umi-filter | −69% | −40% | −36% | +26% | −80% | −26% | −76% |
+| taxonomy | −23% | −1% | −85% | +6% | −64% | −13% | −49% |
+| **Total** | **−23%** | **−4%** | **−62%** | **−4%** | **−65%** | **−19%** | **−51%** |
+
+## Absolute values (legacy → updated)
+
+| Part | Runtime (h) | CPU time (h) | Peak RAM (GB) | CPU energy (Wh) | Memory energy (Wh) | Total energy (Wh) | Dardel accounting (Wh) |
+|---|---|---|---|---|---|---|---|
+| preprocessing | 0.55 → 0.06 | 0.60 → 0.13 | 2.3 → 0.27 | 2.7 → 0.93 | 0.33 → 0.01 | 3.0 → 0.94 | 3.7 → 0.94 |
+| align-annotate | 5.3 → 4.7 | 23.5 → 6.7 | 30.2 → 28.4 | 294 → 53 | 34 → 5.4 | 329 → 58 | 329 → 58 |
+| umi-filter | 0.13 → 0.04 | 0.11 → 0.06 | 11.5 → 7.3 | 0.52 → 0.66 | 0.50 → 0.10 | 1.0 → 0.76 | 3.5 → 0.84 |
+| taxonomy | 81.9 → 63.2 | 564 → 559 | 75.4 → 11.2 | 2,391 → 2,527 | 842 → 300 | 3,233 → 2,827 | 5,532 → 2,827 |
+| **Total** | **87.9 → 68.1** | **588 → 566** | **75.4 → 28.4** | **2,689 → 2,581** | **877 → 305** | **3,566 → 2,887** | **5,868 → 2,887** |
+
+:::
+
+
+
+## Total walltime
+
+Total walltime for test samples per pipeline version.
+
+| version | runtime (s) | runtime (h:m:s) | runtime |
+|---------|-------------|-----------------|---------|
+| legacy | 150164 | 41:42:44 | 1 day, 17 h, 42 m, 44 s |
+| updated | 9732 | 2:42:12 | 2 h, 42 m, 12 s |
+
+* The [updated pipeline]{.green} had a [runtime of 6%]{.green} compared to the legacy version.
+
+## Take-home message
+
+::: {.incremental}
+1. Use a workflow manager (helps with parallelization, resource handling, re-runs etc.)
+2. Think carefully about workflow structure (minimize redundancies).
+3. When possible, split big jobs into smaller steps to use resources more efficiently.
+4. Split input files by size to increase parallelization and make resource use predictable (but optimize split sizes).
+5. Use built-in post-processing for efficient software (_e.g_ `mmseqs easy-search`) rather than custom-built scripts.
+6. Avoid for loops over large data-frames -> instead use purpose-built packages (_e.g._ `polars`).
+
+:::

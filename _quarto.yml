@@ -1,0 +1,26 @@
+project:
+  type: website
+  output-dir: docs
+  render:
+    - "*.qmd"
+
+website:
+  sidebar:
+    style: "docked"
+    search: true
+    contents:
+      - text: "Intro"
+        href: index.qmd
+      - section: "Slides"
+        href: slides.qmd
+        contents:
+          - pages/presentations/2026-10-01.qmd
+
+format:
+  html:
+    theme:
+      - cosmo
+      - brand
+
+execute:
+  freeze: auto

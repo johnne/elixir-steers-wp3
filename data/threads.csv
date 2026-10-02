@@ -1,0 +1,56 @@
+version,rule,threads,pipeline_part
+legacy,UMI_filtering,1,umi-filter
+legacy,demultiplex_probe,4,align-annotate
+legacy,mmseqs_vs_SILVA,10,taxonomy
+legacy,mmseqs_vs_SILVA.Bacteria_genus.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.Bacteria_phylum.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.Bacteria_species.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.Eukaryota_genus.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.Eukaryota_phylum.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.Eukaryota_species.spatial_pos,1,taxonomy
+legacy,mmseqs_vs_SILVA.m8.add_silva_tax,1,taxonomy
+legacy,mmseqs_vs_SILVA.m8.best_hit_multiple,1,taxonomy
+legacy,mmseqs_vs_SILVA.m8.lca,1,taxonomy
+legacy,polyA_tso_filter,1,preprocessing
+legacy,polyA_tso_trim,4,preprocessing
+legacy,process_demultiplex_bacteria,1,align-annotate
+legacy,st_pipeline_demultiplex_bacteria,20,align-annotate
+legacy,st_pipeline_multi,20,align-annotate
+legacy,st_pipeline_single,20,align-annotate
+legacy,subseq_probes,1,align-annotate
+legacy,trim_R1_left,1,preprocessing
+legacy,trim_R1_right,1,preprocessing
+legacy,vsearch,1,vsearch
+updated,barcode_and_umi_R1.fastqc,8,qc
+updated,demultiplex_probe,1,align-annotate
+updated,fastqc R1 (raw),8,qc
+updated,fastqc R1 (trimmed),8,qc
+updated,fastqc R2 (raw),8,qc
+updated,fastqc R2 (trimmed),8,qc
+updated,filter_by_umi,4,umi-filter
+updated,mmseqs_bestmatch_db,1,taxonomy
+updated,mmseqs_easy_taxonomy_vs_SILVA,10,taxonomy
+updated,multiqc_aligned,1,qc
+updated,multiqc_raw,1,qc
+updated,multiqc_trimmed,1,qc
+updated,parse_mmseqs_easy_taxonomy_SILVA,2,taxonomy
+updated,probe_sequence_R1.fastqc,8,qc
+updated,process_demultiplex_microbial,1,align-annotate
+updated,split_vsearch,4,taxonomy
+updated,st_pipeline_host_stats,1,align-annotate
+updated,store_barcode_and_umi,4,preprocessing
+updated,store_probe_sequence,4,preprocessing
+updated,stpipe_align,20,align-annotate
+updated,stpipe_annotate,1,align-annotate
+updated,stpipe_demultiplex (host),4,align-annotate
+updated,stpipe_demultiplex (microbial),4,align-annotate
+updated,stpipe_trim,1,align-annotate
+updated,subseq_probes,4,align-annotate
+updated,taxonomy_spatial_pos.Bacteria_genus,4,taxonomy
+updated,taxonomy_spatial_pos.Bacteria_phylum,4,taxonomy
+updated,taxonomy_spatial_pos.Bacteria_species,4,taxonomy
+updated,taxonomy_spatial_pos.Eukaryota_genus,4,taxonomy
+updated,taxonomy_spatial_pos.Eukaryota_phylum,4,taxonomy
+updated,taxonomy_spatial_pos.Eukaryota_species,4,taxonomy
+updated,trim_R2,4,preprocessing
+updated,vsearch,1,vsearch

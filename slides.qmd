@@ -1,0 +1,5 @@
+## Slides
+
+| Title | date |
+|-------|------|
+| [Improving the carbon footprint of a computational workflow](pages/presentations/2026-10-01.qmd) | Fri 2 Oct 2026 |
